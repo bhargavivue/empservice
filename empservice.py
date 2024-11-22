@@ -50,6 +50,26 @@ def search_employees():
    else:
     print("no employee found ith given criteria.")
 
+def update_employee():
+  emp_id=int(input("enter employee id to update"))
+  cursor.execute("SELECT * FROM EMPLOYEES WHERE ID=?",(emp_id,))
+  employee=cursor.fetchone()
+  if employee is None:
+    print(f"No employee found with the given ID: {emp_id}.")
+    return
+  print(f"current detalis:{employee}")
+  print("choose a field to update:")
+  print("1.department")
+  print("2.salary")
+  choice=input("enter your choice:")
+  if choice=="1":
+   new_dept=input("enter new deartment:")
+   cursor.execute("UPDATE EMPLOYEES SET dept=? where id=?",(new_dept,emp_id))
+  elif choice=="2":               
+    new_salary=float(input("enter new salary:"))
+    cursor.execute("UPDATE EMPLOYEES SET SALARY=? where id=?",(new_salary,emp_id))               
+  else:
+   print("Invalid choice.")
 
 def main():
     """Main function with a menu to interact with the program."""
@@ -58,6 +78,7 @@ while True:
     print("1. Add a new employee")
     print("2.view all employees")
     print("3. Search for an employee")
+    print("4. Update an employee's details")
     print("12. Exit")
 
     choice = input("Enter your choice: ")
@@ -69,6 +90,9 @@ while True:
     
     elif choice == "3":
             search_employees()
+    
+    elif choice == "4":
+            update_employee()
     
     elif choice == "12":
          print("Exiting program.")
