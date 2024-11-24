@@ -41,15 +41,14 @@ class EmployeeDatabase:
        if employees:
          print("search results")
          print(f"employee{employees}")
-       else:
-        print("no employee found with given criteria.")
       else:
+        print("no employee found with given criteria.")
         self.cursor.execute("SELECT * FROM EMPLOYEES WHERE name LIKE ?", ('%' + search_query + '%',))
         employees=self.cursor.fetchall()
-        if employees:
+      if employees:
          print("n\search results")
          print(f"employee{employees}")
-        else:
+      else:
          print("no employee found ith given criteria.")
 
     def update_employee(self):
@@ -73,6 +72,7 @@ class EmployeeDatabase:
         self.cursor.execute("UPDATE EMPLOYEES SET SALARY=? where id=?",(new_salary,emp_id))               
       else:
         print("Invalid choice.")
+
     def delete_employee(self):
       """Remove an employee record from the database using their unique ID."""
       emp_id=int(input("enter employee the employee id to delete:"))  
@@ -87,6 +87,33 @@ class EmployeeDatabase:
           print(f"Employee with ID {emp_id} has been deleted successfully.")
       else:
        print("Deletion cancelled.")
+    def filter_employees(self):
+       """Filter employees by department or salary range."""
+       print("\n filter options:" )
+       print("1.department")
+       print("2.salary")
+       choice=input("ENTER YOUR CHOICE:")
+       if choice=="1":
+        dept=input("enter the depatment to filter by:")
+        self.cursor.execute("SELECT * FROM EMPLOYEES WHERE DEPT=?",(dept,))
+        employees=self.cursor.fetchall()
+        if employees: 
+          print(f"employess in department'{dept}'.")
+          for employee in employees:
+           print(employee)
+        else:
+         print(f"no employees found in the department' {dept}'.")
+       elif choice =="2":
+            min_salary=float(input("enter the minimum_salary:"))
+            max_salary=float(input("enter the maximum_salary:"))
+            self.cursor.execute("select * from employees where salary between ? and ?",(min_salary,max_salary))
+            employees=self.cursor.fetchall()
+            if employees:
+              print(f"employees with salary between{min_salary}and{max_salary}:")
+              for employee in employees:
+               print(employee)
+       else:
+         print("Invalid choice. Please select a valid filter option.")
 def main():
       """Main function with a menu to interact with the program."""
       db= EmployeeDatabase()
@@ -97,6 +124,7 @@ def main():
         print("3. Search for an employee")
         print("4. Update an employee's details")
         print("5. Delete an employee")
+        print("6. Filter employees by department or salary range")
         print("12. Exit")
 
         choice = input("Enter your choice: ")
@@ -114,8 +142,11 @@ def main():
             db.update_employee()
     
         elif choice == "5":
-          db.delete_employee()
+          db.delete_employees()
        
+        elif choice == "6":
+          db.filter_employees()
+        
         elif choice == "12":
          print("Exiting program.")
          break
