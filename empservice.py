@@ -112,8 +112,8 @@ class EmployeeDatabase:
               print(f"employees with salary between{min_salary}and{max_salary}:")
               for employee in employees:
                print(employee)
-       else:
-         print("Invalid choice. Please select a valid filter option.")
+            else:
+             print(f"no employee between minumum and maximum salary.")
 def main():
       """Main function with a menu to interact with the program."""
       db= EmployeeDatabase()
