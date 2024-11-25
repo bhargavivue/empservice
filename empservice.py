@@ -68,9 +68,11 @@ class EmployeeDatabase:
       if choice=="1":
         new_dept=input("enter new deartment:")
         self.cursor.execute("UPDATE EMPLOYEES SET dept=? where id=?",(new_dept,emp_id))
+        self.conn.commit()
       elif choice=="2":               
         new_salary=float(input("enter new salary:"))
-        self.cursor.execute("UPDATE EMPLOYEES SET SALARY=? where id=?",(new_salary,emp_id))               
+        self.cursor.execute("UPDATE EMPLOYEES SET SALARY=? where id=?",(new_salary,emp_id)) 
+        self.conn.commit();              
       else:
         print("Invalid choice.")
 
@@ -85,9 +87,11 @@ class EmployeeDatabase:
       confirm = input(f"Are you sure you want to delete employee {employee}? (yes/no): ")
       if confirm == "yes":
           self.cursor.execute("DELETE FROM EMPLOYEES WHERE ID=?", (emp_id,))
+          self.conn.commit()
           print(f"Employee with ID {emp_id} has been deleted successfully.")
       else:
        print("Deletion cancelled.")
+
     def filter_employees(self):
        """Filter employees by department or salary range."""
        print("\n filter options:" )
