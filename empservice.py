@@ -41,19 +41,20 @@ class EmployeeDatabase:
        if employees:
          print("search results")
          print(f"employee{employees}")
+       else:
+          print("no employee found with given criteria.")
       else:
-        print("no employee found with given criteria.")
         self.cursor.execute("SELECT * FROM EMPLOYEES WHERE name LIKE ?", ('%' + search_query + '%',))
         employees=self.cursor.fetchall()
-      if employees:
-         print("n\search results")
-         print(f"employee{employees}")
-      else:
-         print("no employee found ith given criteria.")
+        if employees:
+          print("search results")
+          print(f"employee{employees}")
+        else:
+          print("no employee found with given criteria.")
 
     def update_employee(self):
       """Update an employee's department or salary."""
-      emp_id=int(input("enter employee id to update"))
+      emp_id=int(input("enter employee id to update:"))
       self.cursor.execute("SELECT * FROM EMPLOYEES WHERE ID=?",(emp_id,))
       employee=self.cursor.fetchone()
       if employee is None:
@@ -114,26 +115,37 @@ class EmployeeDatabase:
                print(employee)
             else:
              print(f"no employee between minumum and maximum salary.")
+    def calculate_average_salary_by_department(self):
+          """Calculate and display the average salary for each department."""
+          self.cursor.execute("SELECT dept, AVG(salary) FROM EMPLOYEES GROUP BY dept")
+          results=self.cursor.fetchall()
+          if results:
+            print("average salary by department")
+            for dept,avg_salary in results:
+              print(f"Department: {dept}, Average Salary: {avg_salary:.2f}")
+          else:
+               print("No data available to calculate average salary.")
 def main():
       """Main function with a menu to interact with the program."""
       db= EmployeeDatabase()
       while True:
         print("\nChoose an option:")
         print("1. Add a new employee")
-        print("2.view all employees")
+        print("2. view all employees")
         print("3. Search for an employee")
         print("4. Update an employee's details")
         print("5. Delete an employee")
         print("6. Filter employees by department or salary range")
-        print("12. Exit")
+        print("7. Calculate average salary by department")
+        print("8. Exit")
 
         choice = input("Enter your choice: ")
 
         if choice == "1":
-          db.add_employee()
+           db.add_employee()
     
         elif choice =="2":   
-         db.view_all_employees() 
+           db.view_all_employees() 
     
         elif choice == "3":
             db.search_employees()
@@ -142,12 +154,15 @@ def main():
             db.update_employee()
     
         elif choice == "5":
-          db.delete_employees()
+           db.delete_employee()
        
         elif choice == "6":
-          db.filter_employees()
+           db.filter_employees()
         
-        elif choice == "12":
+        elif choice == "7":
+           db.calculate_average_salary_by_department()
+        
+        elif choice == "8":
          print("Exiting program.")
          break
         else:
